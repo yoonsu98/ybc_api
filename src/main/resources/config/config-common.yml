@@ -1,0 +1,13 @@
+# ** Common **
+spring:
+  config:
+    activate:
+      on-profile: "common"
+
+# ** Server **
+server:
+  port: 8081
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    context-path: /api

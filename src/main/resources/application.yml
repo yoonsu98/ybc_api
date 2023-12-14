@@ -1,0 +1,9 @@
+spring:
+  config:
+    import:
+      - classpath:/config/config-common.yml
+      - classpath:/config/config-mysql.yml
+  profiles:
+    active: local
+    group:
+      "local": "common, mysql"
