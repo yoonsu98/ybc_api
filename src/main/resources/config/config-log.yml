@@ -1,0 +1,16 @@
+# ** Logging **
+
+## LOCAL
+spring:
+  config:
+    activate:
+      on-profile: "log-console"
+logging:
+  pattern:
+    console: '%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:[%-5p]} ${PID:- } --- [%t] [%logger{39}:%L] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}'
+  level:
+    root: info
+    org.mybatis: false
+    org.hibernate.SQL: debug
+    com.yoonsu.ybc: debug
+    org.springframework.web.cors: INFO

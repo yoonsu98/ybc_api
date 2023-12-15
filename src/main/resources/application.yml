@@ -3,7 +3,8 @@ spring:
     import:
       - classpath:/config/config-common.yml
       - classpath:/config/config-mysql.yml
+      - classpath:/config/config-log.yml
   profiles:
     active: local
     group:
-      "local": "common, mysql"
+      "local": "common, mysql,log-console"

@@ -1,6 +1,6 @@
 package com.yoonsu.ybc.config.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.yoonsu.ybc.common.enums.ErrorEnum;
 import lombok.*;
 
 /**
@@ -13,9 +13,12 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 public class ErrorMap {
-    private String message;
     private String code;
+    private String message;
+
+    public ErrorMap(String code) {
+        this.code = code;
+        this.message = ErrorEnum.findMessageByCode(code);
+    }
 }
