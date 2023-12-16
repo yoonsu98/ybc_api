@@ -23,6 +23,7 @@ public class User {
     @Id
     private Long userNo;                                /* 사용자 번호 */
     private String kakaoToken;                          /* 카카오 토큰 */
+    private String nickname;                            /* 닉네임 */
     private String teamDcd;                             /* [100] 팀 구분코드 */
     private String wthdrYn;                             /* 탈퇴 여부 */
     private LocalDateTime joinDate;                     /* 가입 일시 */

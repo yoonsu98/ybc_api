@@ -1,4 +1,3 @@
-# ** MySQL  **
 spring:
   config:
     activate:
