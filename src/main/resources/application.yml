@@ -8,3 +8,8 @@ spring:
     active: local
     group:
       "local": "common, mysql,log-console"
+  thymeleaf:
+    prefix: /WEB-INF/views/
+    suffix: .jsp
+    encoding: UTF-8
+    cache: false # 템플릿 캐시 사용 여부 (개발 중에는 주로 false로 설정)
