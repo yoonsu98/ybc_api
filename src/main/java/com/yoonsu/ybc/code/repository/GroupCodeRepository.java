@@ -2,10 +2,9 @@ package com.yoonsu.ybc.code.repository;
 
 import com.yoonsu.ybc.code.entity.Code;
 import com.yoonsu.ybc.code.entity.CodePK;
+import com.yoonsu.ybc.code.entity.GroupCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * packageName    : com.yoonsu.ybc.code.repository
@@ -15,8 +14,6 @@ import java.util.List;
  * description    : 공통코드 Repository
  */
 @Repository
-public interface CodeRepository extends JpaRepository<Code, CodePK> {
-
-    List<Code> findCodeByGroupCdAndUseYn(String groupCd, String useYn);
-
+public interface GroupCodeRepository extends JpaRepository<GroupCode, String> {
+    GroupCode findByColumnNm(String columnNm);
 }
