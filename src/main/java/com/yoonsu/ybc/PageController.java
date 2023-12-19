@@ -22,7 +22,14 @@ public class PageController {
      //메인화면
     @RequestMapping(value = "/login")
     public String main(HttpServletRequest request, HttpSession session, Model model) {
-        log.debug("viewDashboard");
+        log.debug("login");
         return "login";
+    }
+
+     //메인화면
+    @RequestMapping(value = "/kakao")
+    public String kakao(HttpServletRequest request, HttpSession session, Model model) {
+        log.debug("kakao");
+        return "kakao";
     }
 }

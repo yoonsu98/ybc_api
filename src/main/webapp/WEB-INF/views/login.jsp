@@ -5,7 +5,6 @@
         <meta charset="UTF-8">
         <title>로그인 화면</title>
         <script async src="/webjars/jquery/3.6.4/jquery.min.js"></script>
-        <script async src="/js/ajax-item-admin.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
         <style type="text/css">
@@ -41,6 +40,7 @@
             <form class="card card-sm">
                 <div class="card-body row no-gutters align-items-center">
                     <button class="btn btn-lg btn-success" type="button" id="login-btn" onclick="fnLogin();">로그인</button>
+                    <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=027af1e1bbd65e2161d454d88f739af6&redirect_uri=http://localhost:8081/kakao">로그인</a>
                 </div>
             </form>
         </div>
@@ -50,8 +50,4 @@
 </html>
 
 <script type="text/javascript">
-    function fnLogin() {
-        alert("로그인 버튼");
-        // TODO : 카카오 로그인 연동
-    }
 </script>
