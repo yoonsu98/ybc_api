@@ -37,7 +37,7 @@ prefix="spring"%> --%>
         </style>
     </head>
 
-<input type="hidden" id="code"/>
+    <input type="hidden" id="code"/>
 <body class="bg-light">
 <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <div class="container">
@@ -59,8 +59,7 @@ prefix="spring"%> --%>
 </html>
 
 <script type="text/javascript">
-    // TODO : 오류 해결
-    // TODO : 서버에 client_secret 저장 및 서비스 연동
+    // TODO : 신규 회원가입과 기존 가입 구분하기
     $(document).ready(function () {
         const searchParam = new URLSearchParams(location.search);
         const code = searchParam.get('code');
@@ -69,30 +68,30 @@ prefix="spring"%> --%>
     });
 
     function fnGetToken() {
-        var code = $("#code").val();
+        var data = {
+            code : $("#code").val()
+            ,client_id : "027af1e1bbd65e2161d454d88f739af6"
+            ,redirect_url : "http://localhost:8081/kakao"
+            ,grant_type : "authorization_code"
+            ,client_secret : "FTCBzIYWbw0EmCnDDb5EIeRgS3l47Xkz"
+        }
+
         $.ajax({
             type: "post",
             url: "https://kauth.kakao.com/oauth/token",
             contentType: "application/x-www-form-urlencoded",
-            data: {grant_type:code
-            , client_id : "027af1e1bbd65e2161d454d88f739af6"
-            , redirect_uri:"http://localhost:8081/kakao"},
-            success: function (datas) {
-                if (datas.success) {
-                    tableList = datas.tableList;
-                    dmndList = datas.dmndList;
-                    fnCodeHtml(tableList, dmndList);
-                } else {
-                    openAlert("조회값이 없습니다.");
-                }
+            data: $.param(data),
+            success: function(response) {
+                console.log('Success:', response);
+                console.log(response.access_token);
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                openAlert("서버와의 통신중에 오류가 발생했습니다.");
-            },
+            error: function(error) {
+                // 오류가 발생했을 때 수행할 작업
+                console.log('Error:', error);
+            }
         });
     }
 
 
-    //TODO : 토큰 받기
     //TODO : client_secret 암호화 후 화면에서 복호화 후 post
 </script>

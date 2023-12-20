@@ -1,0 +1,9 @@
+# ** env **
+spring:
+  config:
+    activate:
+      on-profile: "env"
+
+kakao:
+  client:
+    secret: "FTCBzIYWbw0EmCnDDb5EIeRgS3l47Xkz"
