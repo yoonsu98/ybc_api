@@ -39,7 +39,6 @@
         <div class="col-12 col-md-10 col-lg-8">
             <form class="card card-sm">
                 <div class="card-body row no-gutters align-items-center">
-                    <button class="btn btn-lg btn-success" type="button" id="login-btn" onclick="fnLogin();">로그인</button>
                     <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=027af1e1bbd65e2161d454d88f739af6&redirect_uri=http://localhost:8081/kakao">로그인</a>
                 </div>
             </form>

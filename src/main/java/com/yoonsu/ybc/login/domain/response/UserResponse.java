@@ -40,4 +40,10 @@ public class UserResponse {
                 .build();
         return userResponse;
     }
+
+    public void save(String kakaoToken, String nickname, String teamDcd) {
+        this.kakaoToken = kakaoToken;
+        this.nickname = nickname;
+        this.teamDcd = teamDcd;
+    }
 }

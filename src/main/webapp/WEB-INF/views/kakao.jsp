@@ -41,15 +41,18 @@ prefix="spring"%> --%>
 <body class="bg-light">
 <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <div class="container">
-    <div class="py-5 text-center">
-        <p class="lead">redirect 확인하기</p>
-    </div>
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
             <form class="card card-sm">
-                <div class="card-body row no-gutters align-items-center">
-                    <button class="btn btn-lg btn-success" type="button" id="login-btn" onclick="fnLogin();">로그인
-                    </button>
+                <div class="card-body row no-gutters align-items-center" id="divNickname">
+                    <p>닉네임 뭘로 하실래요?</p>
+                    <input type="text" id="nickname"/>
+                    <input type="button" onclick="fnSetNickname();"/>
+                </div>
+                <div class="card-body row no-gutters align-items-center" id="divTeam">
+                    <p>응원하는 팀이 있나요?</p>
+                    <select id="teadDcd">
+                    </select>
                 </div>
             </form>
         </div>
@@ -83,7 +86,32 @@ prefix="spring"%> --%>
             data: $.param(data),
             success: function(response) {
                 console.log('Success:', response);
-                console.log(response.access_token);
+                var token = response.access_token;
+                fnSetToken(token);
+            },
+            error: function(error) {
+                location.reload();
+                fnGetToken();
+                console.log('Error:', error);
+            }
+        });
+    }
+
+    function fnSetToken(token) {
+        $("#divTeam").hide();
+    }
+
+    function fnSetNickname() {
+        var nickname = $("#nickname").val();
+        $("#divNickname").hide();
+        $("#divTeam").show();
+
+        $.ajax({
+            type: "get",
+            url: "http://localhost:8081/code/findCodeByColumnNm",
+            data: {columnNm : "teamDcd"},
+            success: function(response) {
+                console.log('Success:', response);
             },
             error: function(error) {
                 // 오류가 발생했을 때 수행할 작업
@@ -91,7 +119,4 @@ prefix="spring"%> --%>
             }
         });
     }
-
-
-    //TODO : client_secret 암호화 후 화면에서 복호화 후 post
 </script>

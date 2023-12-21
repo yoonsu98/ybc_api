@@ -6,8 +6,8 @@ spring:
   # ** MySQL  **
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ybc?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-    username: root
+    url: jdbc:mysql://172.18.0.1:0.0:3307/ybc?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: yoonsu
     password: yoonsu1234
     hikari:
       connection-timeout: 30000
@@ -19,4 +19,5 @@ spring:
     properties:
       hibernate:
         show_sql: false
-        format_sql: false
+        format_sql: true
+        default_schema: ybc
