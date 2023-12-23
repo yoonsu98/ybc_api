@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 public class UserResponse {
     private Long userNo;                                /* 사용자 번호 */
     private String kakaoToken;                          /* 카카오 토큰 */
+    private String kakaoId;                             /* 카카오 아이디 */
     private String nickname;                            /* 닉네임 */
     private String teamDcd;                             /* [100] 팀 구분코드 */
     private String wthdrYn;                             /* 탈퇴 여부 */
@@ -39,11 +40,5 @@ public class UserResponse {
                 .wthdrYn(user.getWthdrYn())
                 .build();
         return userResponse;
-    }
-
-    public void save(String kakaoToken, String nickname, String teamDcd) {
-        this.kakaoToken = kakaoToken;
-        this.nickname = nickname;
-        this.teamDcd = teamDcd;
     }
 }

@@ -1,13 +1,11 @@
 package com.yoonsu.ybc.login.controller;
 
+import com.yoonsu.ybc.login.domain.request.UserRequest;
 import com.yoonsu.ybc.login.domain.response.UserResponse;
 import com.yoonsu.ybc.login.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * packageName    : com.yoonsu.ybc.login.controller
@@ -26,6 +24,16 @@ public class UserController {
     @GetMapping(value = "/getUserInfo")
     public UserResponse getUserInfo(@RequestParam(value = "userNo", required = false) Long userNo) {
         return userService.getUserInfo(userNo);
+    }
+
+    @PostMapping(value = "/registryUserInfo")
+    public void registryUserInfo(@RequestBody UserRequest userRequest) {
+        userService.registryUserInfo(userRequest);
+    }
+
+    @PostMapping(value = "/getTokenInfo")
+    public UserResponse getTokenInfo(@RequestBody UserRequest userRequest) {
+        return userService.getTokenInfo(userRequest);
     }
 }
 

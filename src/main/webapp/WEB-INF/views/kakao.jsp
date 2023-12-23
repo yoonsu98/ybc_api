@@ -38,6 +38,8 @@ prefix="spring"%> --%>
     </head>
 
     <input type="hidden" id="code"/>
+    <input type="hidden" id="token"/>
+    <input type="hidden" id="kakaoId"/>
 <body class="bg-light">
 <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <div class="container">
@@ -47,12 +49,13 @@ prefix="spring"%> --%>
                 <div class="card-body row no-gutters align-items-center" id="divNickname">
                     <p>닉네임 뭘로 하실래요?</p>
                     <input type="text" id="nickname"/>
-                    <input type="button" onclick="fnSetNickname();"/>
+                    <input type="button" value="결정" onclick="fnSetUser();"/>
                 </div>
                 <div class="card-body row no-gutters align-items-center" id="divTeam">
                     <p>응원하는 팀이 있나요?</p>
-                    <select id="teadDcd">
+                    <select id="teamList">
                     </select>
+                    <input type="button" value="선택" onclick="fnRegUser();"/>
                 </div>
             </form>
         </div>
@@ -62,21 +65,26 @@ prefix="spring"%> --%>
 </html>
 
 <script type="text/javascript">
-    // TODO : 신규 회원가입과 기존 가입 구분하기
     $(document).ready(function () {
+        fnGetCode();
+        fnGetTeamList();
+    });
+
+    function fnGetCode() {
         const searchParam = new URLSearchParams(location.search);
         const code = searchParam.get('code');
         $("#code").val(code);
-        fnGetToken();
-    });
+
+        (code != null) ? fnGetToken() : fnGetCode();
+    }
 
     function fnGetToken() {
         var data = {
-            code : $("#code").val()
-            ,client_id : "027af1e1bbd65e2161d454d88f739af6"
-            ,redirect_url : "http://localhost:8081/kakao"
-            ,grant_type : "authorization_code"
-            ,client_secret : "FTCBzIYWbw0EmCnDDb5EIeRgS3l47Xkz"
+            code: $("#code").val()
+            , client_id: "027af1e1bbd65e2161d454d88f739af6"
+            , redirect_url: "http://localhost:8081/kakao"
+            , grant_type: "authorization_code"
+            , client_secret: "FTCBzIYWbw0EmCnDDb5EIeRgS3l47Xkz"
         }
 
         $.ajax({
@@ -84,36 +92,79 @@ prefix="spring"%> --%>
             url: "https://kauth.kakao.com/oauth/token",
             contentType: "application/x-www-form-urlencoded",
             data: $.param(data),
-            success: function(response) {
-                console.log('Success:', response);
+            success: function (response) {
                 var token = response.access_token;
-                fnSetToken(token);
+                fnGetTokenInfo(token);
             },
-            error: function(error) {
+            error: function (error) {
                 location.reload();
                 fnGetToken();
+            }
+        });
+    }
+
+    function fnGetTokenInfo(token) {
+        $.ajax({
+            type: "post",
+            url: "http://localhost:8081/user/getTokenInfo",
+            contentType: "application/json",
+            data: JSON.stringify({kakaoToken:token}),
+            success: function (response) {
+                const kakaoId = response.data.kakaoId;
+                $("#kakaoId").val(kakaoId);
+            },
+            error: function (error) {
+
+            }
+        });
+        $("#token").val(token);
+        $("#divTeam").hide();
+    }
+
+    function fnSetUser() {
+        var nickname = $("#nickname").val();
+        $("#divNickname").hide();
+        $("#divTeam").show();
+    }
+
+    function fnGetTeamList() {
+        $.ajax({
+            type: "get",
+            url: "http://localhost:8081/code/findCodeByColumnNm",
+            data: {columnNm: "teamDcd"},
+            success: function (response) {
+                fnSetTeamHtml(response.data);
+            },
+            error: function (error) {
+                // 오류가 발생했을 때 수행할 작업
                 console.log('Error:', error);
             }
         });
     }
 
-    function fnSetToken(token) {
-        $("#divTeam").hide();
+    function fnSetTeamHtml(data) {
+        for (const team of data) {
+            const html = `<option value="${team.cd}">${team.cdNm}</option>`;
+            $("#teamList").append(html);
+        }
     }
 
-    function fnSetNickname() {
-        var nickname = $("#nickname").val();
-        $("#divNickname").hide();
-        $("#divTeam").show();
+    function fnRegUser() {
+       const kakaoToken = $("#token").val();
+       const kakaoId = $("#kakaoId").val();
+       const teamDcd = $("#teamList").val();
+       const nickname = $("#nickname").val();
 
         $.ajax({
-            type: "get",
-            url: "http://localhost:8081/code/findCodeByColumnNm",
-            data: {columnNm : "teamDcd"},
-            success: function(response) {
-                console.log('Success:', response);
+            type: "post",
+            url: "http://localhost:8081/user/registryUserInfo",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({kakaoToken,kakaoId,teamDcd,nickname}),
+            success: function (response) {
+                alert("성공했습니다");
             },
-            error: function(error) {
+            error: function (error) {
                 // 오류가 발생했을 때 수행할 작업
                 console.log('Error:', error);
             }

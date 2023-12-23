@@ -6,4 +6,9 @@ spring:
 
 kakao:
   client:
+    id: "027af1e1bbd65e2161d454d88f739af6"
     secret: "FTCBzIYWbw0EmCnDDb5EIeRgS3l47Xkz"
+  grant:
+    type: "authorization_code"
+  redirect:
+    url: "http://localhost:8081/kakao"

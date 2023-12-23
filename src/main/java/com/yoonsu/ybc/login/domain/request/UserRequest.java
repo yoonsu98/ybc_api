@@ -13,4 +13,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserRequest {
+    private String kakaoToken;
+    private String kakaoId;
+    private String teamDcd;
+    private String nickname;
 }

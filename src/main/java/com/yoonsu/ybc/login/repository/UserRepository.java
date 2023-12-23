@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    // TODO : 카카오 토큰으로 신규 유저 생성
+    User findByKakaoId(String kakaoId);
 }
