@@ -25,6 +25,11 @@ public class RestApiTemplate {
         this.headers = new HttpHeaders();
     }
 
+    public void setHeader(String token) {
+        this.headers.remove("Authorization");
+        if (token != null) this.headers.add("Authorization", "Bearer " + token);
+    }
+
     public void setHeader(MediaType mediaType, String token) {
         this.headers.remove("Authorization");
         this.headers.setContentType(mediaType);

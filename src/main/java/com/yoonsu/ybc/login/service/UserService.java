@@ -58,23 +58,31 @@ public class UserService {
     }
 
     /**
-     * 카카오 아이디로 회원 조회(서비스 분리 필요)
+     * 카카오 토큰으로 회원 정보 조회
      * @param userRequest
      * @return
      */
     public UserResponse getTokenInfo(UserRequest userRequest) {
         try {
-            restApiTemplate.setHeader("Authorization", "Bearer " + userRequest.getKakaoToken());
+            restApiTemplate.setHeader(userRequest.getKakaoToken());
             Object response = restApiTemplate.get("https://kapi.kakao.com/v1/user/access_token_info");
             Map<String, Object> map = objectMapper.convertValue(response, Map.class);
             String kakaoId = map.get("id").toString();
-            User user = userRepository.findByKakaoId(kakaoId);
-            if(user != null) {
-                 // TODO : 자동 로그인
-            }
+            this.findByKakaoId(kakaoId);
             return UserResponse.builder().kakaoId(kakaoId).build();
         } catch (Exception e) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "E0010");
+        }
+    }
+
+    /**
+     * 카카오 아이디로 회원 조회
+     * @param kakaoId
+     */
+    public void findByKakaoId(String kakaoId) {
+        User user = userRepository.findByKakaoId(kakaoId);
+        if(user != null) {
+            // TODO : 자동 로그인
         }
     }
 }
