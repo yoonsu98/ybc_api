@@ -8,5 +8,4 @@ package com.yoonsu.ybc.api.kakao.service;
  * description    : 카카오 로그인 Service
  */
 public class KakaoService {
-    // TODO : 여기서 토큰 받고 암호화 후 UserService에서 DB update
 }

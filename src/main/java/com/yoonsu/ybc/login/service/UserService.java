@@ -82,7 +82,7 @@ public class UserService {
     public void findByKakaoId(String kakaoId) {
         User user = userRepository.findByKakaoId(kakaoId);
         if(user != null) {
-            // TODO : 자동 로그인
+            // TODO : JWT Token 만들어서 session에 setting
         }
     }
 }

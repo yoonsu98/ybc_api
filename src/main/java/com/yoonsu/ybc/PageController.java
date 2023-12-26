@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PageController {
 
      //메인화면
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/main")
     public String main(HttpServletRequest request, HttpSession session, Model model) {
         log.debug("login");
-        return "login";
+        return "main";
     }
 
-     //메인화면
+     //회원가입화면
     @RequestMapping(value = "/kakao")
     public String kakao(HttpServletRequest request, HttpSession session, Model model) {
         log.debug("kakao");

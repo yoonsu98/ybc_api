@@ -3,7 +3,7 @@
 <head>
     <head>
         <meta charset="UTF-8">
-        <title>로그인 화면</title>
+        <title>메인화면</title>
         <script async src="/webjars/jquery/3.6.4/jquery.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
