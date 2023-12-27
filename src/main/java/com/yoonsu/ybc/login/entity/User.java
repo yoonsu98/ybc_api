@@ -37,7 +37,7 @@ public class User {
 
     /* 회원가입 */
     public void save(UserRequest userRequest) {
-        this.kakaoToken = userRequest.getKakaoToken();
+        this.kakaoToken = userRequest.getKakaoRefreshToken();
         this.kakaoId = userRequest.getKakaoId();
         this.nickname = userRequest.getNickname();
         this.teamDcd = userRequest.getTeamDcd();

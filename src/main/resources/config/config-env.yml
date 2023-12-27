@@ -11,4 +11,4 @@ kakao:
   grant:
     type: "authorization_code"
   redirect:
-    url: "http://localhost:8081/kakao"
+    uri: "http://localhost:8081/kakao"

@@ -12,7 +12,7 @@ prefix="spring"%> --%>
         <meta charset="UTF-8">
         <title>로그인 화면</title>
         <script async src="/webjars/jquery/3.6.4/jquery.min.js"></script>
-        <script async src="/js/ajax-item-admin.js"></script>
+<%--        <script async src="/js/ajax-item-admin.js"></script>--%>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
         <style type="text/css">
@@ -74,27 +74,18 @@ prefix="spring"%> --%>
         const searchParam = new URLSearchParams(location.search);
         const code = searchParam.get('code');
         $("#code").val(code);
-
-        (code != null) ? fnGetToken() : fnGetCode();
-    }
+        fnGetToken();
+    };
 
     function fnGetToken() {
-        var data = {
-            code: $("#code").val()
-            , client_id: "027af1e1bbd65e2161d454d88f739af6"
-            , redirect_url: "http://localhost:8081/kakao"
-            , grant_type: "authorization_code"
-            , client_secret: "FTCBzIYWbw0EmCnDDb5EIeRgS3l47Xkz"
-        }
-
+        const code = $("#code").val();
         $.ajax({
             type: "post",
-            url: "https://kauth.kakao.com/oauth/token",
-            contentType: "application/x-www-form-urlencoded",
-            data: $.param(data),
+            url: "http://localhost:8081/user/getToken",
+            contentType: "application/json",
+            data: JSON.stringify({code:code}),
             success: function (response) {
-                var token = response.access_token;
-                fnGetTokenInfo(token);
+                // fnGetTokenInfo(token);
             },
             error: function (error) {
                 location.reload();
@@ -108,7 +99,7 @@ prefix="spring"%> --%>
             type: "post",
             url: "http://localhost:8081/user/getTokenInfo",
             contentType: "application/json",
-            data: JSON.stringify({kakaoToken:token}),
+            data: JSON.stringify({kakaoRefreshToken:token}),
             success: function (response) {
                 const kakaoId = response.data.kakaoId;
                 $("#kakaoId").val(kakaoId);

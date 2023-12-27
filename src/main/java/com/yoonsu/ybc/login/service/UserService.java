@@ -1,6 +1,7 @@
 package com.yoonsu.ybc.login.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yoonsu.ybc.api.kakao.service.KakaoService;
 import com.yoonsu.ybc.common.utils.RestApiTemplate;
 import com.yoonsu.ybc.config.exception.ApiException;
 import com.yoonsu.ybc.login.domain.request.UserRequest;
@@ -25,8 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final RestApiTemplate restApiTemplate;
-    ObjectMapper objectMapper = new ObjectMapper();
+    private final KakaoService kakaoService;
 
     /**
      * userNo로 회원 조회
@@ -64,10 +64,7 @@ public class UserService {
      */
     public UserResponse getTokenInfo(UserRequest userRequest) {
         try {
-            restApiTemplate.setHeader(userRequest.getKakaoToken());
-            Object response = restApiTemplate.get("https://kapi.kakao.com/v1/user/access_token_info");
-            Map<String, Object> map = objectMapper.convertValue(response, Map.class);
-            String kakaoId = map.get("id").toString();
+            String kakaoId = kakaoService.getTokenInfo(userRequest);
             this.findByKakaoId(kakaoId);
             return UserResponse.builder().kakaoId(kakaoId).build();
         } catch (Exception e) {
@@ -82,7 +79,7 @@ public class UserService {
     public void findByKakaoId(String kakaoId) {
         User user = userRepository.findByKakaoId(kakaoId);
         if(user != null) {
-            // TODO : JWT Token 만들어서 session에 setting
+            // TODO : 새로 발급된 토큰 db에 세팅
         }
     }
 }
