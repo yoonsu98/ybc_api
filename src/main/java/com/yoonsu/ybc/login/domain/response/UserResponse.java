@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponse {
     private Long userNo;                                /* 사용자 번호 */
-    private String kakaoRefreshToken;                          /* 카카오 토큰 */
     private String kakaoId;                             /* 카카오 아이디 */
     private String nickname;                            /* 닉네임 */
     private String teamDcd;                             /* [100] 팀 구분코드 */
@@ -32,7 +31,6 @@ public class UserResponse {
     public static UserResponse of(User user) {
         UserResponse userResponse = UserResponse.builder()
                 .userNo(user.getUserNo())
-                .kakaoRefreshToken(user.getKakaoToken())
                 .nickname(user.getNickname())
                 .teamDcd(user.getTeamDcd())
                 .joinDate(user.getJoinDate())

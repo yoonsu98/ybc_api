@@ -99,7 +99,7 @@ prefix="spring"%> --%>
             type: "post",
             url: "http://localhost:8081/user/getTokenInfo",
             contentType: "application/json",
-            data: JSON.stringify({kakaoRefreshToken:token}),
+            data: JSON.stringify({kakaoToken:token}),
             success: function (response) {
                 const kakaoId = response.data.kakaoId;
                 $("#kakaoId").val(kakaoId);
@@ -141,7 +141,6 @@ prefix="spring"%> --%>
     }
 
     function fnRegUser() {
-       const kakaoToken = $("#token").val();
        const kakaoId = $("#kakaoId").val();
        const teamDcd = $("#teamList").val();
        const nickname = $("#nickname").val();
@@ -151,7 +150,7 @@ prefix="spring"%> --%>
             url: "http://localhost:8081/user/registryUserInfo",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({kakaoToken,kakaoId,teamDcd,nickname}),
+            data: JSON.stringify({kakaoId,teamDcd,nickname}),
             success: function (response) {
                 alert("성공했습니다");
             },

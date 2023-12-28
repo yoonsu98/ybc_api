@@ -79,7 +79,7 @@ public class UserService {
     public void findByKakaoId(String kakaoId) {
         User user = userRepository.findByKakaoId(kakaoId);
         if(user != null) {
-            // TODO : 새로 발급된 토큰 db에 세팅
+            // TODO : 내 서비스의 access_token, refresh_token 만들어서 세팅. 카카오 토큰은 검증용으로만 사용
         }
     }
 }

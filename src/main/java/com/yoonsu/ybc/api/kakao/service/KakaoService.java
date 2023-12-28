@@ -72,7 +72,7 @@ public class KakaoService {
         //uWPpgDvD71-gxPYRte-RsO8KC46drQIeHlcKKw0gAAABjJaiyA3MISgqRbFCUQ (만료토큰)
         String kakaoId = null;
         try {
-            restApiTemplate.setHeader(userRequest.getKakaoRefreshToken());
+            restApiTemplate.setHeader(userRequest.getKakaoToken());
             Object response = restApiTemplate.get("https://kapi.kakao.com/v1/user/access_token_info");
             Map<String, Object> map = objectMapper.convertValue(response, Map.class);
             kakaoId = map.get("id").toString();
