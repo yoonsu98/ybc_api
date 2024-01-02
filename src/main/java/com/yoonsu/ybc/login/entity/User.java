@@ -23,7 +23,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userNo;                                /* 사용자 번호 */
-    private String kakaoToken;                          /* 카카오 토큰 */
+    private String refreshToken;                        /* refresh 토큰 */
     private String kakaoId;                             /* 카카오 아이디 */
     private String nickname;                            /* 닉네임 */
     private String teamDcd;                             /* [100] 팀 구분코드 */
@@ -37,7 +37,7 @@ public class User {
 
     /* 회원가입 */
     public void save(UserRequest userRequest) {
-        this.kakaoToken = userRequest.getKakaoRefreshToken();
+        this.refreshToken = userRequest.getRefreshToken();
         this.kakaoId = userRequest.getKakaoId();
         this.nickname = userRequest.getNickname();
         this.teamDcd = userRequest.getTeamDcd();

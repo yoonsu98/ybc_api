@@ -34,13 +34,9 @@ public class UserController {
         userService.registryUserInfo(userRequest);
     }
 
-    @PostMapping(value = "/getToken")
-    public KakaoResponse getToken(@RequestBody KakaoRequest kakaoRequest){
-        return kakaoService.getToken(kakaoRequest.getCode());
-    }
     @PostMapping(value = "/getTokenInfo")
-    public UserResponse getTokenInfo(@RequestBody UserRequest userRequest) {
-        return userService.getTokenInfo(userRequest);
+    public UserResponse getTokenInfo(@RequestBody KakaoRequest kakaoRequest){
+        return userService.getTokenInfo(kakaoRequest.getCode());
     }
 }
 

@@ -12,3 +12,6 @@ kakao:
     type: "authorization_code"
   redirect:
     uri: "http://localhost:8081/kakao"
+
+security:
+  key: "yoon-baseball-community"

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -65,14 +64,13 @@ public class KakaoService {
     /**
      * 카카오 토큰 정보 조회
      *
-     * @param userRequest
+     * @param accessToken
      * @return
      */
-    public String getTokenInfo(UserRequest userRequest) {
-        //uWPpgDvD71-gxPYRte-RsO8KC46drQIeHlcKKw0gAAABjJaiyA3MISgqRbFCUQ (만료토큰)
+    public String getTokenInfo(String accessToken) {
         String kakaoId = null;
         try {
-            restApiTemplate.setHeader(userRequest.getKakaoToken());
+            restApiTemplate.setHeader(accessToken);
             Object response = restApiTemplate.get("https://kapi.kakao.com/v1/user/access_token_info");
             Map<String, Object> map = objectMapper.convertValue(response, Map.class);
             kakaoId = map.get("id").toString();

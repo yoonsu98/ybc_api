@@ -1,8 +1,8 @@
 package com.yoonsu.ybc.login.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yoonsu.ybc.api.kakao.domain.response.KakaoResponse;
 import com.yoonsu.ybc.api.kakao.service.KakaoService;
-import com.yoonsu.ybc.common.utils.RestApiTemplate;
+import com.yoonsu.ybc.common.utils.JwtProvider;
 import com.yoonsu.ybc.config.exception.ApiException;
 import com.yoonsu.ybc.login.domain.request.UserRequest;
 import com.yoonsu.ybc.login.domain.response.UserResponse;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -27,6 +26,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final KakaoService kakaoService;
+    private final JwtProvider jwtProvider;
 
     /**
      * userNo로 회원 조회
@@ -58,28 +58,31 @@ public class UserService {
     }
 
     /**
-     * 카카오 토큰으로 회원 정보 조회
-     * @param userRequest
+     * 인가코드로 token 정보 조회
+     *
+     * @param code
      * @return
      */
-    public UserResponse getTokenInfo(UserRequest userRequest) {
-        try {
-            String kakaoId = kakaoService.getTokenInfo(userRequest);
-            this.findByKakaoId(kakaoId);
-            return UserResponse.builder().kakaoId(kakaoId).build();
-        } catch (Exception e) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "E0010");
+    public UserResponse getTokenInfo(String code) {
+        // TODO : 가입회원은 바로 로그인 flag = "member", 미가입은 flag = "none"
+        UserResponse response = null;
+        String accessToken = null;
+        String refreshToken = null;
+        KakaoResponse kakaoResponse = kakaoService.getToken(code);
+        if(kakaoResponse != null) {
+            String kakaoId = kakaoService.getTokenInfo(kakaoResponse.getAccess_token());
+            User user = userRepository.findByKakaoId(kakaoId);
+            // 회원인 경우 token 만들고 바로 로그인
+            if (user != null) {
+                accessToken = jwtProvider.createAccessToken(kakaoId);
+                refreshToken = jwtProvider.createRefreshToken();
+            }
+            response = UserResponse.builder()
+                    .kakaoId(kakaoId)
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .build();
         }
-    }
-
-    /**
-     * 카카오 아이디로 회원 조회
-     * @param kakaoId
-     */
-    public void findByKakaoId(String kakaoId) {
-        User user = userRepository.findByKakaoId(kakaoId);
-        if(user != null) {
-            // TODO : 내 서비스의 access_token, refresh_token 만들어서 세팅. 카카오 토큰은 검증용으로만 사용
-        }
+        return response;
     }
 }

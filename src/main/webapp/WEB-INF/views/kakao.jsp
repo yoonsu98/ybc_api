@@ -74,32 +74,15 @@ prefix="spring"%> --%>
         const searchParam = new URLSearchParams(location.search);
         const code = searchParam.get('code');
         $("#code").val(code);
-        fnGetToken();
+        fnGetTokenInfo(code);
     };
 
-    function fnGetToken() {
-        const code = $("#code").val();
-        $.ajax({
-            type: "post",
-            url: "http://localhost:8081/user/getToken",
-            contentType: "application/json",
-            data: JSON.stringify({code:code}),
-            success: function (response) {
-                // fnGetTokenInfo(token);
-            },
-            error: function (error) {
-                location.reload();
-                fnGetToken();
-            }
-        });
-    }
-
-    function fnGetTokenInfo(token) {
+    function fnGetTokenInfo(code) {
         $.ajax({
             type: "post",
             url: "http://localhost:8081/user/getTokenInfo",
             contentType: "application/json",
-            data: JSON.stringify({kakaoToken:token}),
+            data: JSON.stringify({code:code}),
             success: function (response) {
                 const kakaoId = response.data.kakaoId;
                 $("#kakaoId").val(kakaoId);

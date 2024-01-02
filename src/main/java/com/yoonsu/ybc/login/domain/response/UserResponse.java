@@ -1,6 +1,7 @@
 package com.yoonsu.ybc.login.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.yoonsu.ybc.api.kakao.domain.response.KakaoResponse;
 import com.yoonsu.ybc.login.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,9 +28,13 @@ public class UserResponse {
     private String wthdrYn;                             /* 탈퇴 여부 */
     private LocalDateTime joinDate;                     /* 가입 일시 */
     private LocalDateTime wthdrDate;                    /* 탈퇴 일시 */
+    private String accessToken;                         /* ybc access_token */
+    private String refreshToken;                        /* ybc refresh_token */
+    private String flag;                                /* 가입회원 : "member", 미가입회원 : "none" */
 
     public static UserResponse of(User user) {
         UserResponse userResponse = UserResponse.builder()
+                .refreshToken(user.getRefreshToken())
                 .userNo(user.getUserNo())
                 .nickname(user.getNickname())
                 .teamDcd(user.getTeamDcd())
