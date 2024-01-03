@@ -64,7 +64,6 @@ public class UserService {
      * @return
      */
     public UserResponse getTokenInfo(String code) {
-        // TODO : 가입회원은 바로 로그인 flag = "member", 미가입은 flag = "none"
         UserResponse response = null;
         String accessToken = null;
         String refreshToken = null;

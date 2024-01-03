@@ -1,13 +1,15 @@
 package com.yoonsu.ybc.common.utils;
 
-import com.yoonsu.ybc.login.domain.response.UserResponse;
 import io.jsonwebtoken.*;
-import jakarta.xml.bind.DatatypeConverter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * packageName    : com.yoonsu.ybc.common.utils
@@ -16,9 +18,12 @@ import java.util.Map;
  * date           : 2024-01-02
  * description    : jwt 생성
  */
+@Component
 public class JwtProvider {
+
     @Value("${security.key}")
-    private static String securityKey;
+    private String securityKey;
+
     private Long accessExpiredTime = 1000 * 60 * 30L; //30분
     private Long refreshExpiredTime = 1000 * 60 * 60 * 24 * 30L; //한 달
 
@@ -33,11 +38,15 @@ public class JwtProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + accessExpiredTime);
 
+        // Encode the securityKey using Base64
+        String encodedKey = Base64.getEncoder().encodeToString(securityKey.getBytes(StandardCharsets.UTF_8));
+
+        // Build the JWT
         String token = Jwts.builder()
                 .setSubject(kakaoId)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, securityKey)
+                .signWith(SignatureAlgorithm.HS256, encodedKey)
                 .compact();
 
         return token;
@@ -66,8 +75,10 @@ public class JwtProvider {
      * @param token
      * @return
      */
-    public static String getSubject(String token) {
-        return Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(securityKey)).parseClaimsJws(token).getBody().getSubject();
+    public String getSubject(String token) {
+        byte[] keyBytes = Base64.getDecoder().decode(securityKey);
+        Claims claims = Jwts.parser().setSigningKey(keyBytes).parseClaimsJws(token).getBody();
+        return claims.getSubject();
     }
 
     /**
@@ -76,7 +87,7 @@ public class JwtProvider {
      * @param token
      * @return
      */
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         Date expiration = Jwts.parser().setSigningKey(securityKey).parseClaimsJws(token).getBody().getExpiration();
         if (expiration.before(new Date())) {
             return false;

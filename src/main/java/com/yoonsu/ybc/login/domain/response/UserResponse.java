@@ -30,7 +30,6 @@ public class UserResponse {
     private LocalDateTime wthdrDate;                    /* 탈퇴 일시 */
     private String accessToken;                         /* ybc access_token */
     private String refreshToken;                        /* ybc refresh_token */
-    private String flag;                                /* 가입회원 : "member", 미가입회원 : "none" */
 
     public static UserResponse of(User user) {
         UserResponse userResponse = UserResponse.builder()
