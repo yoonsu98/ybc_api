@@ -36,12 +36,13 @@ public class User {
     private String updateId;                            /* 수정 */
 
     /* 회원가입 */
-    public void save(UserRequest userRequest) {
-        this.refreshToken = userRequest.getRefreshToken();
+    public void save(UserRequest userRequest, String refreshToken) {
+        this.refreshToken = refreshToken;
         this.kakaoId = userRequest.getKakaoId();
         this.nickname = userRequest.getNickname();
         this.teamDcd = userRequest.getTeamDcd();
         this.joinDate = LocalDateTime.now();
         this.regDate = LocalDateTime.now();
+        this.wthdrYn = "N";
     }
 }

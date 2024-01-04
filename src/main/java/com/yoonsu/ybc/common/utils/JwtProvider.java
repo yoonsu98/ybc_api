@@ -1,13 +1,9 @@
 package com.yoonsu.ybc.common.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
@@ -34,19 +30,16 @@ public class JwtProvider {
      * @return
      * @throws Exception
      */
-    public String createAccessToken(String kakaoId) {
+    public String createAccessToken(String kakaoId) throws JsonProcessingException {
         Date now = new Date();
         Date validity = new Date(now.getTime() + accessExpiredTime);
-
-        // Encode the securityKey using Base64
-        String encodedKey = Base64.getEncoder().encodeToString(securityKey.getBytes(StandardCharsets.UTF_8));
 
         // Build the JWT
         String token = Jwts.builder()
                 .setSubject(kakaoId)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, encodedKey)
+                .signWith(SignatureAlgorithm.HS256, securityKey)
                 .compact();
 
         return token;

@@ -1,8 +1,7 @@
 package com.yoonsu.ybc.login.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yoonsu.ybc.api.kakao.domain.request.KakaoRequest;
-import com.yoonsu.ybc.api.kakao.domain.response.KakaoResponse;
-import com.yoonsu.ybc.api.kakao.service.KakaoService;
 import com.yoonsu.ybc.login.domain.request.UserRequest;
 import com.yoonsu.ybc.login.domain.response.UserResponse;
 import com.yoonsu.ybc.login.service.UserService;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/user")
 public class UserController {
     private final UserService userService;
-    private final KakaoService kakaoService;
 
     @GetMapping(value = "/getUserInfo")
     public UserResponse getUserInfo(@RequestParam(value = "userNo", required = false) Long userNo) {
@@ -35,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/getTokenInfo")
-    public UserResponse getTokenInfo(@RequestBody KakaoRequest kakaoRequest){
+    public UserResponse getTokenInfo(@RequestBody KakaoRequest kakaoRequest) throws JsonProcessingException {
         return userService.getTokenInfo(kakaoRequest.getCode());
     }
 }

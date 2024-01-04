@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoonsu.ybc.api.kakao.domain.response.KakaoResponse;
 import com.yoonsu.ybc.common.utils.RestApiTemplate;
 import com.yoonsu.ybc.config.exception.ApiException;
-import com.yoonsu.ybc.login.domain.request.UserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

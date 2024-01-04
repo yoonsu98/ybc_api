@@ -1,5 +1,6 @@
 package com.yoonsu.ybc.login.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yoonsu.ybc.api.kakao.domain.response.KakaoResponse;
 import com.yoonsu.ybc.api.kakao.service.KakaoService;
 import com.yoonsu.ybc.common.utils.JwtProvider;
@@ -53,7 +54,7 @@ public class UserService {
      */
     public void registryUserInfo(UserRequest userRequest) {
         User user = new User();
-        user.save(userRequest);
+        user.save(userRequest, jwtProvider.createRefreshToken());
         userRepository.save(user);
     }
 
@@ -63,7 +64,7 @@ public class UserService {
      * @param code
      * @return
      */
-    public UserResponse getTokenInfo(String code) {
+    public UserResponse getTokenInfo(String code) throws JsonProcessingException {
         UserResponse response = null;
         String accessToken = null;
         String refreshToken = null;

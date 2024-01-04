@@ -84,19 +84,30 @@ prefix="spring"%> --%>
             contentType: "application/json",
             data: JSON.stringify({code:code}),
             success: function (response) {
-                const kakaoId = response.data.kakaoId;
-                $("#kakaoId").val(kakaoId);
+                console.log(response);
+                if(response.data.accessToken != null){
+                    let cookies = '';
+                    access_cookie = `access_token=${response.data.accessToken};`;
+                    refresh_cookie = `refresh_token=${response.data.refreshToken};`;
+                    document.cookie = access_cookie;
+                    document.cookie = refresh_cookie;
+                }
+                $("#kakaoId").val(response.data.kakaoId);
             },
             error: function (error) {
 
             }
         });
-        $("#token").val(token);
         $("#divTeam").hide();
     }
 
     function fnSetUser() {
         var nickname = $("#nickname").val();
+
+        if(nickname.trim() == "") {
+            alert("입력해주세요.");
+            return false;
+        }
         $("#divNickname").hide();
         $("#divTeam").show();
     }
