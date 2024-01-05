@@ -12,7 +12,7 @@ prefix="spring"%> --%>
         <meta charset="UTF-8">
         <title>로그인 화면</title>
         <script async src="/webjars/jquery/3.6.4/jquery.min.js"></script>
-<%--        <script async src="/js/ajax-item-admin.js"></script>--%>
+        <%--        <script async src="/js/ajax-item-admin.js"></script>--%>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
         <style type="text/css">
@@ -73,8 +73,11 @@ prefix="spring"%> --%>
     function fnGetCode() {
         const searchParam = new URLSearchParams(location.search);
         const code = searchParam.get('code');
-        $("#code").val(code);
-        fnGetTokenInfo(code);
+
+        if(code != null) {
+            $("#code").val(code);
+            fnGetTokenInfo(code);
+        }
     };
 
     function fnGetTokenInfo(code) {
@@ -82,17 +85,18 @@ prefix="spring"%> --%>
             type: "post",
             url: "http://localhost:8081/user/getTokenInfo",
             contentType: "application/json",
-            data: JSON.stringify({code:code}),
+            data: JSON.stringify({code: code}),
             success: function (response) {
-                console.log(response);
-                if(response.data.accessToken != null){
-                    let cookies = '';
-                    access_cookie = `access_token=${response.data.accessToken};`;
-                    refresh_cookie = `refresh_token=${response.data.refreshToken};`;
+                const {accessToken, refreshToken, kakaoId, nickname} = response.data;
+                if (accessToken != null) {
+                    access_cookie = `access_token=${accessToken};`;
+                    refresh_cookie = `refresh_token=${refreshToken};`;
                     document.cookie = access_cookie;
                     document.cookie = refresh_cookie;
+                    alert(`${nickname}님 안녕하세요.`);
+                    location.href = "http://localhost:8081/main";
                 }
-                $("#kakaoId").val(response.data.kakaoId);
+                $("#kakaoId").val(kakaoId);
             },
             error: function (error) {
 
@@ -104,8 +108,8 @@ prefix="spring"%> --%>
     function fnSetUser() {
         var nickname = $("#nickname").val();
 
-        if(nickname.trim() == "") {
-            alert("입력해주세요.");
+        if (nickname.trim() == "") {
+            alert("사용할 닉네임을 입력해주세요.");
             return false;
         }
         $("#divNickname").hide();
@@ -135,18 +139,19 @@ prefix="spring"%> --%>
     }
 
     function fnRegUser() {
-       const kakaoId = $("#kakaoId").val();
-       const teamDcd = $("#teamList").val();
-       const nickname = $("#nickname").val();
+        const kakaoId = $("#kakaoId").val();
+        const teamDcd = $("#teamList").val();
+        const nickname = $("#nickname").val();
 
         $.ajax({
             type: "post",
             url: "http://localhost:8081/user/registryUserInfo",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({kakaoId,teamDcd,nickname}),
+            data: JSON.stringify({kakaoId, teamDcd, nickname}),
             success: function (response) {
-                alert("성공했습니다");
+                alert(`${nickname}님 안녕하세요.`);
+                location.href = "http://localhost:8081/main";
             },
             error: function (error) {
                 // 오류가 발생했을 때 수행할 작업

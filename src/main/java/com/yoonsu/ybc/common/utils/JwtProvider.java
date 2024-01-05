@@ -30,7 +30,7 @@ public class JwtProvider {
      * @return
      * @throws Exception
      */
-    public String createAccessToken(String kakaoId) throws JsonProcessingException {
+    public String createAccessToken(String kakaoId) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + accessExpiredTime);
 

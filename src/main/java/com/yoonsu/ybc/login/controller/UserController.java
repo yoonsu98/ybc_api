@@ -33,8 +33,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/getTokenInfo")
-    public UserResponse getTokenInfo(@RequestBody KakaoRequest kakaoRequest) throws JsonProcessingException {
+    public UserResponse getTokenInfo(@RequestBody KakaoRequest kakaoRequest) {
         return userService.getTokenInfo(kakaoRequest.getCode());
     }
+
+    // TODO : 로그아웃
 }
 

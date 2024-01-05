@@ -45,4 +45,9 @@ public class User {
         this.regDate = LocalDateTime.now();
         this.wthdrYn = "N";
     }
+
+    /* refresh token 변경 */
+    public void save(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

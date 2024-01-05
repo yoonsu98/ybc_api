@@ -1,6 +1,5 @@
 package com.yoonsu.ybc.login.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yoonsu.ybc.api.kakao.domain.response.KakaoResponse;
 import com.yoonsu.ybc.api.kakao.service.KakaoService;
 import com.yoonsu.ybc.common.utils.JwtProvider;
@@ -64,25 +63,40 @@ public class UserService {
      * @param code
      * @return
      */
-    public UserResponse getTokenInfo(String code) throws JsonProcessingException {
+    public UserResponse getTokenInfo(String code) {
         UserResponse response = null;
-        String accessToken = null;
-        String refreshToken = null;
         KakaoResponse kakaoResponse = kakaoService.getToken(code);
-        if(kakaoResponse != null) {
+        if (kakaoResponse != null) {
             String kakaoId = kakaoService.getTokenInfo(kakaoResponse.getAccess_token());
             User user = userRepository.findByKakaoId(kakaoId);
             // 회원인 경우 token 만들고 바로 로그인
             if (user != null) {
-                accessToken = jwtProvider.createAccessToken(kakaoId);
-                refreshToken = jwtProvider.createRefreshToken();
+                response = this.login(kakaoId);
             }
-            response = UserResponse.builder()
-                    .kakaoId(kakaoId)
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
-                    .build();
+            else {
+                response = UserResponse.builder().kakaoId(kakaoId).build();
+            }
         }
         return response;
+    }
+
+    /**
+     * token 발급(로그인)
+     * @param kakaoId
+     * @return
+     */
+    public UserResponse login(String kakaoId) {
+        String accessToken = jwtProvider.createAccessToken(kakaoId);
+        String refreshToken = jwtProvider.createRefreshToken();
+
+        User user = userRepository.findByKakaoId(kakaoId);
+        user.save(refreshToken);
+        userRepository.save(user);
+
+        return UserResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .nickname(user.getNickname())
+                .build();
     }
 }
