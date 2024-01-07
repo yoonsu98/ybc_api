@@ -10,9 +10,14 @@
         <meta charset="UTF-8">
         <title>로그인 화면</title>
         <script async src="/webjars/jquery/3.6.4/jquery.min.js"></script>
-        <%--        <script async src="/js/ajax-item-admin.js"></script>--%>
+        <script src="/js/kakao.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+        <!-- Custom styles for this template -->
+        <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link rel="stylesheet" type="text/css" href="/css/blog.css">
+
         <style type="text/css">
             .container {
                 max-width: 960px;
@@ -59,102 +64,14 @@
         </div>
     </div>
 </div>
+
+<footer class="blog-footer">
+    <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.
+    </p>
+    <p>
+        <a href="#">Back to top</a>
+    </p>
+</footer>
+
 </body>
 </html>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        fnGetCode();
-        fnGetTeamList();
-    });
-
-    function fnGetCode() {
-        const searchParam = new URLSearchParams(location.search);
-        const code = searchParam.get('code');
-
-        if(code != null) {
-            $("#code").val(code);
-            fnGetTokenInfo(code);
-        }
-    };
-
-    function fnGetTokenInfo(code) {
-        $.ajax({
-            type: "post",
-            url: "http://localhost:8081/user/getTokenInfo",
-            contentType: "application/json",
-            data: JSON.stringify({code: code}),
-            success: function (response) {
-                const {accessToken, refreshToken, kakaoId, nickname} = response.data;
-                if (accessToken != null) {
-                    access_cookie = `access_token=${accessToken};`;
-                    refresh_cookie = `refresh_token=${refreshToken};`;
-                    document.cookie = access_cookie;
-                    document.cookie = refresh_cookie;
-                    alert(`${nickname}님 안녕하세요.`);
-                    location.href = "http://localhost:8081/main";
-                }
-                $("#kakaoId").val(kakaoId);
-            },
-            error: function (error) {
-
-            }
-        });
-        $("#divTeam").hide();
-    }
-
-    function fnSetUser() {
-        var nickname = $("#nickname").val();
-
-        if (nickname.trim() == "") {
-            alert("사용할 닉네임을 입력해주세요.");
-            return false;
-        }
-        $("#divNickname").hide();
-        $("#divTeam").show();
-    }
-
-    function fnGetTeamList() {
-        $.ajax({
-            type: "get",
-            url: "http://localhost:8081/code/findCodeByColumnNm",
-            data: {columnNm: "teamDcd"},
-            success: function (response) {
-                fnSetTeamHtml(response.data);
-            },
-            error: function (error) {
-                // 오류가 발생했을 때 수행할 작업
-                console.log('Error:', error);
-            }
-        });
-    }
-
-    function fnSetTeamHtml(data) {
-        for (const team of data) {
-            const html = `<option value="${team.cd}">${team.cdNm}</option>`;
-            $("#teamList").append(html);
-        }
-    }
-
-    function fnRegUser() {
-        const kakaoId = $("#kakaoId").val();
-        const teamDcd = $("#teamList").val();
-        const nickname = $("#nickname").val();
-
-        $.ajax({
-            type: "post",
-            url: "http://localhost:8081/user/registryUserInfo",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({kakaoId, teamDcd, nickname}),
-            success: function (response) {
-                alert(`${nickname}님 안녕하세요.`);
-                location.href = "http://localhost:8081/main";
-            },
-            error: function (error) {
-                // 오류가 발생했을 때 수행할 작업
-                console.log('Error:', error);
-            }
-        });
-    }
-</script>

@@ -4,6 +4,12 @@ spring:
     activate:
       on-profile: "common"
 
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+    static-path-pattern: /resources/**
+
 # ** Server **
 server:
   port: 8081
