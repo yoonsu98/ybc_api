@@ -2,6 +2,7 @@ package com.yoonsu.ybc.config;
 
 import com.yoonsu.ybc.common.utils.JwtProvider;
 import com.yoonsu.ybc.config.exception.ApiException;
+import com.yoonsu.ybc.login.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class DefaultInteceptor implements HandlerInterceptor {
     private final JwtProvider jwtProvider;
+    private final UserRepository userRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -32,28 +34,40 @@ public class DefaultInteceptor implements HandlerInterceptor {
 
         Cookie[] getCookie = request.getCookies();
 
-        String token = null;
+        String access_token = null;
+        String refresh_token = null;
 
-        if(getCookie != null){
-            for(int i=0; i<getCookie.length; i++){
+        if (getCookie != null) {
+            for (int i = 0; i < getCookie.length; i++) {
                 Cookie cookie = getCookie[i];
 
-                if("access_token".equals(cookie.getName())) {
-                    token = cookie.getValue();
+                if ("access_token".equals(cookie.getName())) {
+                    access_token = cookie.getValue();
+                }
+                if ("refresh_token".equals(cookie.getName())) {
+                    refresh_token = cookie.getValue();
                 }
             }
-        } else {
-            token = request.getHeader("access_token");
+        }
+
+        if (access_token == null || refresh_token == null) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "E0002");
         }
 
         //유효토큰 확인
-        if(!jwtProvider.validateToken(token)) {
-            log.error("유효하지 않은 토큰");
-//            throw new ApiException(HttpStatus.FORBIDDEN, "E0002");
+        if (!jwtProvider.validateToken(access_token) && jwtProvider.validateToken(refresh_token)) {
+            String kakaoId = userRepository.findByRefreshToken(refresh_token).getKakaoId();
+            for (int i = 0; i < getCookie.length; i++) {
+                Cookie cookie = getCookie[i];
+                if ("access_token".equals(cookie.getName())) {
+                    cookie.setMaxAge(0);
+                    break;
+                }
+            }
+            response.addCookie(new Cookie("access_token", jwtProvider.createAccessToken(kakaoId)));
+        } else if (!jwtProvider.validateToken(access_token) && !jwtProvider.validateToken(refresh_token)) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "E0002");
         }
-
-        // TODO : access_token이 유효X, refresh_token 유효 ->  access_token 발급
-        //  access_token이 유효X, refresh_token 유효X ->  throw new exception (403)
         return result;
     }
 
