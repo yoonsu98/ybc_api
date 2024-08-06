@@ -1,7 +1,5 @@
 package com.yoonsu.ybc.code.repository;
 
-import com.yoonsu.ybc.code.entity.Code;
-import com.yoonsu.ybc.code.entity.CodePK;
 import com.yoonsu.ybc.code.entity.GroupCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
