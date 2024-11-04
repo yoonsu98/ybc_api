@@ -2,7 +2,6 @@ package com.yoonsu.ybc.code.controller;
 
 import com.yoonsu.ybc.code.domain.response.CodeResponse;
 import com.yoonsu.ybc.code.service.CodeService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,9 +1,6 @@
 package com.yoonsu.ybc.code.domain.response;
 
 import com.yoonsu.ybc.code.entity.Code;
-import com.yoonsu.ybc.code.repository.CodeRepository;
-import com.yoonsu.ybc.login.domain.response.UserResponse;
-import com.yoonsu.ybc.login.entity.User;
 import lombok.*;
 
 import java.util.ArrayList;
