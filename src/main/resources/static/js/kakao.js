@@ -17,7 +17,7 @@ function fnGetCode() {
 function fnGetTokenInfo(code) {
     $.ajax({
         type: "post",
-        url: "http://localhost:8081/user/getTokenInfo",
+        url: "http://localhost:8081/user/token-info",
         contentType: "application/json",
         data: JSON.stringify({code: code}),
         success: function (response) {
@@ -53,7 +53,7 @@ function fnSetUser() {
 function fnGetTeamList() {
     $.ajax({
         type: "get",
-        url: "http://localhost:8081/code/findCodeByColumnNm",
+        url: "http://localhost:8081/code/column",
         data: {columnNm: "teamDcd"},
         success: function (response) {
             fnSetTeamHtml(response.data);
@@ -79,7 +79,7 @@ function fnRegUser() {
 
     $.ajax({
         type: "post",
-        url: "http://localhost:8081/user/registryUserInfo",
+        url: "http://localhost:8081/user/user-info",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({kakaoId, teamDcd, nickname}),

@@ -26,7 +26,7 @@ import java.util.List;
 public class CodeController {
     private final CodeService codeService;
 
-    @GetMapping("/findCodeByColumnNm")
+    @GetMapping()
     public List<CodeResponse> findCodeByColumnNm(@RequestParam(value = "columnNm") String columnNm) {
         return codeService.findCodeByColumnNm(columnNm);
     }

@@ -25,17 +25,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping(value = "/getUserInfo")
+    @GetMapping(value = "/user-info")
     public UserResponse getUserInfo(@RequestParam(value = "userNo", required = false) Long userNo) {
         return userService.getUserInfo(userNo);
     }
 
-    @PostMapping(value = "/registryUserInfo")
+    @PostMapping(value = "/user-info")
     public void registryUserInfo(@RequestBody UserRequest userRequest) {
         userService.registryUserInfo(userRequest);
     }
 
-    @PostMapping(value = "/getTokenInfo")
+    @PostMapping(value = "/token-info")
     public UserResponse getTokenInfo(@RequestBody KakaoRequest kakaoRequest) {
         return userService.getTokenInfo(kakaoRequest.getCode());
     }
